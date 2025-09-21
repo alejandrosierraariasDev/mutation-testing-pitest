@@ -1,1 +1,1 @@
-# mutation-testing-pitest
+Este proyecto busca implementar mutation testing para proyectos Java usando piTest, con el objetivo de evaluar la efectividad de las pruebas unitarias existentes. Se mostrará un informe de cobertura de mutación en GitHub Pages o directamente en el README, y se integrará en un pipeline CI/CD para que las mutaciones se ejecuten automáticamente al hacer push. Esto permitirá visibilizar el rigor de las pruebas en tiempo real y añadir profesionalismo al repositorio.
