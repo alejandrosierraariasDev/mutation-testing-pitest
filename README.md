@@ -56,6 +56,8 @@ mutation-testing-pitest/
 ├── .github/
 │   └── workflows/
 │       └── mutation-test.yml     # Configuración de GitHub Actions para Pitest
+├── .gitlab/
+│       └── .gitlab-ci.yml     # Configuración de Gitlab para Pitest
 ├── src/
 │   ├── main/
 │   │   └── java/com/qualitylabs/api/
