@@ -109,6 +109,82 @@ Para ver los resultados en GitHub:
 2. Selecciona la ejecución más reciente del flujo de trabajo "Mutation Testing"
 3. Descarga el informe desde los artefactos o consulta el resumen en la sección de resumen
 
+## 🔄 Integración con GitLab CI/CD
+
+Para integrar las pruebas de mutación en tu pipeline de GitLab CI/CD, crea un archivo `.gitlab-ci.yml` con la siguiente configuración:
+
+```yaml
+stages:
+  - test
+  - mutation-test
+
+variables:
+  MAVEN_OPTS: "-Dmaven.repo.local=./.m2/repository"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -Dmaven.test.failure.ignore=true"
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository/
+    - target/
+
+# Ejecuta las pruebas unitarias primero
+unit-test:
+  stage: test
+  image: maven:3.8.6-openjdk-11
+  script:
+    - mvn $MAVEN_CLI_OPTS clean test
+  artifacts:
+    paths:
+      - target/surefire-reports/
+    when: always
+    expire_in: 1 week
+
+# Ejecuta las pruebas de mutación
+pitest_mutation:
+  stage: mutation-test
+  image: maven:3.8.6-openjdk-11
+  script:
+    - mvn $MAVEN_CLI_OPTS org.pitest:pitest-maven:mutationCoverage
+  artifacts:
+    paths:
+      - target/pit-reports/
+      - target/site/pitest/
+    when: always
+    expire_in: 1 month
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  # Ejecutar en MRs
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      # Ejecutar en rama principal
+    - if: $CI_COMMIT_BRANCH == "develop"               # Ejecutar en develop
+```
+
+### Comportamiento del Umbral de Mutación
+
+El parámetro `<mutationThreshold>75</mutationThreshold>` en el `pom.xml` controla el comportamiento del pipeline:
+
+- **Si la mutación es ≥ 75%**:
+  - El comando `mvn org.pitest:pitest-maven:mutationCoverage` termina con éxito (código 0)
+  - El job `pitest_mutation` en GitLab CI pasa
+  - El pipeline continúa con las siguientes etapas
+
+- **Si la mutación es < 75%**:
+  - El comando falla con un código de salida distinto de cero
+  - El job `pitest_mutation` en GitLab CI falla
+  - El pipeline completo falla
+  - Si tienes reglas de protección de ramas en GitLab, esto evitará la fusión del código hasta que se resuelva
+
+### Configuración Recomendada para Ramas Protegidas
+
+Para asegurar la calidad del código, configura las siguientes reglas en la configuración de ramas protegidas de tu repositorio en GitLab:
+
+1. Ve a **Settings > Repository > Protected Branches**
+2. Selecciona tus ramas principales (main, develop)
+3. Activa "Allows merge only when pipeline succeeds"
+4. Activa "Allows pushes from members who can merge to the branch"
+5. Opcional: Activa "Require approval from code owners"
+
+Esto garantizará que ningún código con una cobertura de mutación insuficiente pueda fusionarse en tus ramas principales.
+
 ## 📊 Ejemplo de Servicios y Pruebas
 
 El proyecto incluye varios servicios de ejemplo con sus respectivas pruebas para demostrar diferentes aspectos del mutation testing:
@@ -125,5 +201,3 @@ Cada servicio tiene pruebas unitarias que cubren diferentes escenarios, algunas 
 - [Documentación Oficial de Pitest](https://pitest.org/)
 - [Guía de Pitest con Maven](https://maven.apache.org/plugins/maven-surefire-plugin/examples/junit-platform.html)
 - [Ejemplos de Mutaciones Comunes](https://pitest.org/quickstart/mutators/)
-
-

@@ -1,0 +1,52 @@
+# .gitlab-ci.yml (en la raíz del proyecto)
+
+# Usamos una imagen Docker con Maven y JDK 17
+image: maven:3.8.7-jdk-17
+
+# Definición de las etapas del pipeline
+stages:
+  - build
+  - verify # Etapa para validaciones y pruebas avanzadas (Mutation Testing)
+
+# --- CONFIGURACIÓN DE CACHE ---
+# Ayuda a acelerar el pipeline guardando dependencias de Maven
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .m2/repository
+
+# ----------------------------------------------------------------------
+# 1. JOB DE CONSTRUCCIÓN (BUILD)
+# Necesario para generar los archivos .class que Pitest mutará.
+# ----------------------------------------------------------------------
+build_job:
+  stage: build
+  script:
+    - echo "Compilando el proyecto..."
+    # Compilamos y empaquetamos el código, saltándonos las pruebas para el build inicial
+    - mvn clean package -DskipTests
+  artifacts:
+    # Opcional: guardamos los JARs compilados
+    paths:
+      - target/**/*.jar
+
+# ----------------------------------------------------------------------
+# 2. JOB DE MUTATION TESTING CON PITEST (VERIFY)
+# Este job ejecutará Pitest y fallará si no se cumple el umbral del pom.xml.
+# ----------------------------------------------------------------------
+pitest_mutation:
+  stage: verify
+  # Nos aseguramos de que la compilación haya terminado
+  needs: ["build_job"]
+  script:
+    - echo "Ejecutando Pitest con umbral de 75% forzado en el pom.xml..."
+    # Este comando leerá el <mutationThreshold>75</mutationThreshold> del pom.xml
+    # y fallará el job si la cobertura es menor.
+    - mvn org.pitest:pitest-maven:mutationCoverage
+
+  # Guardamos los reportes HTML como artefactos de GitLab
+  artifacts:
+    when: always # Guardar incluso si el job falla para inspeccionar el reporte
+    paths:
+      - target/pit-reports/ # La carpeta de reportes de Pitest
+    expire_in: 1 week

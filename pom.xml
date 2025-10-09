@@ -43,7 +43,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.15.0</version>
+                <version>1.15.3</version>
                 <executions>
                     <execution>
                         <id>pit-test</id>
@@ -61,11 +61,16 @@
                     </dependency>
                 </dependencies>
                 <configuration>
+                    <mutationThreshold>75</mutationThreshold>
+                    <coverageThreshold>80</coverageThreshold>
+                    <mutators>
+                        <mutator>DEFAULTS</mutator>
+                    </mutators>
                     <targetClasses>
                         <param>com.qualitylabs.api.*</param>
                     </targetClasses>
                     <targetTests>
-                        <param>com.qualitylabs.api.*</param>
+                        <param>com.qualitylabs.api.*Test</param>
                     </targetTests>
                 </configuration>
             </plugin>
