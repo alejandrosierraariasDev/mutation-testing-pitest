@@ -10,6 +10,9 @@ on:
       - main
       - develop
 
+permissions:
+  contents: write
+
 jobs:
   pitest:
     runs-on: ubuntu-latest
@@ -35,7 +38,7 @@ jobs:
           path: target/pit-reports
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
