@@ -1,4 +1,4 @@
-# 🧪 Mutation Testing con Pitest en Spring Boot
+# 🧪 Mutation Testing with Pitest in Spring Boot
 
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
@@ -8,61 +8,61 @@
 
 
 
-## 🚀 ¿Qué es Mutation Testing?
+## 🚀 What is Mutation Testing?
 
-El mutation testing es una técnica para evaluar la calidad de tus pruebas unitarias, no la calidad de tu código. Su objetivo no es encontrar errores en el código de producción, sino descubrir debilidades en los tests que ya tienes.
+Mutation testing is a technique to evaluate the quality of your unit tests, not the quality of your code. Its goal is not to find bugs in production code, but to discover weaknesses in the tests you already have.
 
-Es como un "test de estrés" para tus pruebas. Imagina que tus tests son un sistema de seguridad. El mutation testing introduce pequeños fallos para ver si tu sistema de seguridad los detecta.
+It's like a "stress test" for your tests. Imagine your tests are a security system. Mutation testing introduces small failures to see if your security system detects them.
 
-### 🔍 ¿Cómo funciona el Mutation Testing?
+### 🔍 How Does Mutation Testing Work?
 
-El proceso se puede resumir en tres pasos:
+The process can be summarized in three steps:
 
-1. **Introduce Mutantes**: El mutator (el "mutador") es una herramienta que introduce automáticamente pequeños y sutiles cambios en tu código, llamados mutantes. Un mutante puede ser un cambio como:
-   - Cambiar `>` por `>=`
-   - Cambiar `&&` por `||`
-   - Eliminar una línea de código
+1. **Introduce Mutants**: The mutator is a tool that automatically introduces small and subtle changes to your code, called mutants. A mutant can be a change like:
+   - Change `>` to `>=`
+   - Change `&&` to `||`
+   - Remove a line of code
 
-2. **Ejecuta las Pruebas**: Se ejecutan todas tus pruebas unitarias contra cada versión mutada de tu código.
+2. **Run the Tests**: All your unit tests are executed against each mutated version of your code.
 
-3. **Analiza los Resultados**: Los resultados se clasifican así:
-   - **Mutante Asesinado (Killed)**: Una de tus pruebas falló al ejecutarse contra el código mutado. Esto es bueno, ya que significa que tus pruebas son lo suficientemente robustas para detectar el fallo.
-   - **Mutante Sobreviviente (Survived)**: Todas tus pruebas pasaron incluso con el mutante presente. Esto es malo, ya que significa que tus tests son ineficaces y no logran detectar un fallo.
+3. **Analyze the Results**: The results are classified as follows:
+   - **Killed Mutant**: One of your tests failed when executed against the mutated code. This is good, as it means your tests are robust enough to detect the failure.
+   - **Survived Mutant**: All your tests passed even with the mutant present. This is bad, as it means your tests are ineffective and fail to detect a failure.
 
-El objetivo final es tener una alta tasa de mutantes "asesinados". Si un mutante sobrevive, tienes una brecha en tus tests que debes cubrir.
+The ultimate goal is to have a high rate of "killed" mutants. If a mutant survives, you have a gap in your tests that you need to cover.
 
-### 🛠️ ¿Para qué sirve Pitest?
+### 🛠️ What is Pitest Used For?
 
-Pitest es la herramienta más popular para hacer mutation testing en proyectos Java. Simplifica y automatiza todo el proceso que acabo de describir.
+Pitest is the most popular tool for doing mutation testing in Java projects. It simplifies and automates the entire process I just described.
 
-En lugar de que tú tengas que introducir los fallos manualmente y ejecutar los tests, Pitest hace todo el trabajo por ti. Se integra con Maven o Gradle y hace lo siguiente:
-- Crea mutantes.
-- Ejecuta los tests contra cada mutante de forma optimizada.
-- Genera un informe HTML detallado que te muestra el porcentaje de mutantes asesinados (el Mutation Score), así como la ubicación exacta de los mutantes que sobrevivieron, para que sepas dónde necesitas mejorar tus pruebas.
+Instead of you having to manually introduce failures and run tests, Pitest does all the work for you. It integrates with Maven or Gradle and does the following:
+- Creates mutants.
+- Runs tests against each mutant in an optimized way.
+- Generates a detailed HTML report that shows the percentage of killed mutants (the Mutation Score), as well as the exact location of survived mutants, so you know where you need to improve your tests.
 
-### Visualizando el Reporte
+### Visualizing the Report
 
-Puedes ver un ejemplo del reporte de mutación generado:
+You can see an example of the generated mutation report:
 
 ![Mutation Testing Report](docs/images/report.png)
 
-En resumen, el mutation testing es el concepto y la técnica, mientras que Pitest es la herramienta que te permite aplicar esa técnica de manera práctica y profesional en tus proyectos. Es una de las mejores formas de asegurar que tus tests no solo cumplan con la cobertura de código, sino que sean realmente efectivos.
+In summary, mutation testing is the concept and technique, while Pitest is the tool that allows you to apply that technique in a practical and professional way in your projects. It's one of the best ways to ensure that your tests not only meet code coverage, but are truly effective.
 
 
-## 📂 Estructura del Proyecto
+## 📂 Project Structure
 
 ```
 mutation-testing-pitest/
 ├── .github/
 │   └── workflows/
-│       └── mutation-test.yml     # Configuración de GitHub Actions para Pitest
+│       └── mutation-test.yml     # GitHub Actions configuration for Pitest
 ├── src/
 │   ├── main/
 │   │   └── java/com/qualitylabs/api/
-│   │       ├── OrderService.java      # Servicio de gestión de pedidos
-│   │       ├── ProductService.java    # Servicio de productos
-│   │       ├── UserService.java       # Servicio de usuarios
-│   │       └── ValidationService.java # Servicio de validaciones
+│   │       ├── OrderService.java      # Order management service
+│   │       ├── ProductService.java    # Product service
+│   │       ├── UserService.java       # User service
+│   │       └── ValidationService.java # Validation service
 │   └── test/
 │       └── java/com/qualitylabs/api/
 │           ├── OrderServiceTest.java
@@ -70,48 +70,48 @@ mutation-testing-pitest/
 │           ├── UserServiceTest.java
 │           └── ValidationServiceTest.java
 ├── .gitignore
-├── pom.xml                         # Configuración de Maven y dependencias
-└── README.md                       # Este archivo
+├── pom.xml                         # Maven configuration and dependencies
+└── README.md                       # This file
 ```
-## 🚦 Cómo Ejecutar las Pruebas de Mutación
+## 🚦 How to Run Mutation Tests
 
-### Ejecución Local
+### Local Execution
 
-Para ejecutar las pruebas de mutación en tu máquina local, usa el siguiente comando de Maven:
+To run mutation tests on your local machine, use the following Maven command:
 
 ```
 mvn test org.pitest:pitest-maven:mutationCoverage
 ```
 
-Este comando hará lo siguiente:
-1. Ejecutará tus pruebas unitarias (para asegurarse de que pasen).
-2. Lanzará el análisis de mutación de Pitest, que creará los "mutantes" y verificará si tus pruebas son lo suficientemente robustas para detectarlos.
+This command will do the following:
+1. Run your unit tests (to ensure they pass).
+2. Launch Pitest's mutation analysis, which will create "mutants" and verify if your tests are robust enough to detect them.
 
-### Visualización de Resultados
+### Viewing Results
 
-Cuando termine, encontrarás el informe completo de Pitest en:
+When it finishes, you'll find the complete Pitest report at:
 ```
 target/site/pitest/index.html
 ```
 
-Abre este archivo en tu navegador para ver:
-- Puntuación de mutación general
-- Mutantes asesinados vs. sobrevivientes
-- Detalles por clase y método
-- Sugerencias para mejorar tus pruebas
+Open this file in your browser to see:
+- Overall mutation score
+- Killed vs. survived mutants
+- Details by class and method
+- Suggestions to improve your tests
 
-## 🔄 Integración con GitHub Actions
+## 🔄 Integration with GitHub Actions
 
-El proyecto incluye un flujo de trabajo de GitHub Actions que ejecuta automáticamente las pruebas de mutación en cada push a las ramas `main` o `develop`.
+The project includes a GitHub Actions workflow that automatically runs mutation tests on every push to the `main` or `develop` branches.
 
-Para ver los resultados en GitHub:
-1. Ve a la pestaña "Actions" en tu repositorio
-2. Selecciona la ejecución más reciente del flujo de trabajo "Mutation Testing"
-3. Descarga el informe desde los artefactos o consulta el resumen en la sección de resumen
+To see the results on GitHub:
+1. Go to the "Actions" tab in your repository
+2. Select the most recent run of the "Mutation Testing" workflow
+3. Download the report from the artifacts or check the summary in the summary section
 
-## 🔄 Integración con GitLab CI/CD
+## 🔄 Integration with GitLab CI/CD
 
-Para integrar las pruebas de mutación en tu pipeline de GitLab CI/CD, crea un archivo `.gitlab-ci.yml` con la siguiente configuración:
+To integrate mutation tests into your GitLab CI/CD pipeline, create a `.gitlab-ci.yml` file with the following configuration:
 
 ```yaml
 stages:
@@ -128,7 +128,7 @@ cache:
     - .m2/repository/
     - target/
 
-# Ejecuta las pruebas unitarias primero
+# Run unit tests first
 unit-test:
   stage: test
   image: maven:3.8.6-openjdk-11
@@ -140,7 +140,7 @@ unit-test:
     when: always
     expire_in: 1 week
 
-# Ejecuta las pruebas de mutación
+# Run mutation tests
 pitest_mutation:
   stage: mutation-test
   image: maven:3.8.6-openjdk-11
@@ -153,51 +153,51 @@ pitest_mutation:
     when: always
     expire_in: 1 month
   rules:
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  # Ejecutar en MRs
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      # Ejecutar en rama principal
-    - if: $CI_COMMIT_BRANCH == "develop"               # Ejecutar en develop
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"  # Run on MRs
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH      # Run on main branch
+    - if: $CI_COMMIT_BRANCH == "develop"               # Run on develop
 ```
 
-### Comportamiento del Umbral de Mutación
+### Mutation Threshold Behavior
 
-El parámetro `<mutationThreshold>75</mutationThreshold>` en el `pom.xml` controla el comportamiento del pipeline:
+The parameter `<mutationThreshold>75</mutationThreshold>` in the `pom.xml` controls the pipeline behavior:
 
-- **Si la mutación es ≥ 75%**:
-  - El comando `mvn org.pitest:pitest-maven:mutationCoverage` termina con éxito (código 0)
-  - El job `pitest_mutation` en GitLab CI pasa
-  - El pipeline continúa con las siguientes etapas
+- **If mutation is ≥ 75%**:
+  - The command `mvn org.pitest:pitest-maven:mutationCoverage` finishes successfully (code 0)
+  - The `pitest_mutation` job in GitLab CI passes
+  - The pipeline continues with the following stages
 
-- **Si la mutación es < 75%**:
-  - El comando falla con un código de salida distinto de cero
-  - El job `pitest_mutation` en GitLab CI falla
-  - El pipeline completo falla
-  - Si tienes reglas de protección de ramas en GitLab, esto evitará la fusión del código hasta que se resuelva
+- **If mutation is < 75%**:
+  - The command fails with a non-zero exit code
+  - The `pitest_mutation` job in GitLab CI fails
+  - The complete pipeline fails
+  - If you have branch protection rules in GitLab, this will prevent code merging until resolved
 
-### Configuración Recomendada para Ramas Protegidas
+### Recommended Configuration for Protected Branches
 
-Para asegurar la calidad del código, configura las siguientes reglas en la configuración de ramas protegidas de tu repositorio en GitLab:
+To ensure code quality, configure the following rules in your GitLab repository's protected branches configuration:
 
-1. Ve a **Settings > Repository > Protected Branches**
-2. Selecciona tus ramas principales (main, develop)
-3. Activa "Allows merge only when pipeline succeeds"
-4. Activa "Allows pushes from members who can merge to the branch"
-5. Opcional: Activa "Require approval from code owners"
+1. Go to **Settings > Repository > Protected Branches**
+2. Select your main branches (main, develop)
+3. Enable "Allows merge only when pipeline succeeds"
+4. Enable "Allows pushes from members who can merge to the branch"
+5. Optional: Enable "Require approval from code owners"
 
-Esto garantizará que ningún código con una cobertura de mutación insuficiente pueda fusionarse en tus ramas principales.
+This will ensure that no code with insufficient mutation coverage can be merged into your main branches.
 
-## 📊 Ejemplo de Servicios y Pruebas
+## 📊 Example Services and Tests
 
-El proyecto incluye varios servicios de ejemplo con sus respectivas pruebas para demostrar diferentes aspectos del mutation testing:
+The project includes several example services with their respective tests to demonstrate different aspects of mutation testing:
 
-- **ProductService**: Demuestra mutaciones aritméticas y de condiciones
-- **UserService**: Muestra validaciones de edad y mensajes de bienvenida
-- **OrderService**: Ejemplifica mutaciones en condiciones lógicas
-- **ValidationService**: Incluye validaciones de email y contraseña
+- **ProductService**: Demonstrates arithmetic and condition mutations
+- **UserService**: Shows age validations and welcome messages
+- **OrderService**: Exemplifies mutations in logical conditions
+- **ValidationService**: Includes email and password validations
 
-Cada servicio tiene pruebas unitarias que cubren diferentes escenarios, algunas intencionalmente débiles para demostrar cómo Pitest puede ayudarte a identificar brechas en la cobertura de pruebas.
+Each service has unit tests that cover different scenarios, some intentionally weak to demonstrate how Pitest can help you identify gaps in test coverage.
 
-## 📚 Recursos Adicionales
+## 📚 Additional Resources
 
-- [Documentación Oficial de Pitest](https://pitest.org/)
-- [Guía de Pitest con Maven](https://maven.apache.org/plugins/maven-surefire-plugin/examples/junit-platform.html)
-- [Ejemplos de Mutaciones Comunes](https://pitest.org/quickstart/mutators/)
+- [Official Pitest Documentation](https://pitest.org/)
+- [Pitest Guide with Maven](https://maven.apache.org/plugins/maven-surefire-plugin/examples/junit-platform.html)
+- [Examples of Common Mutations](https://pitest.org/quickstart/mutators/)
