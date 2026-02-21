@@ -10,16 +10,19 @@ on:
       - main
       - develop
 
+permissions:
+  contents: write
+
 jobs:
   pitest:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -29,14 +32,14 @@ jobs:
         run: mvn test org.pitest:pitest-maven:mutationCoverage
 
       - name: Upload Pitest Report Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pitest-report
-          path: target/site/pitest
+          path: target/pit-reports
 
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
-        uses: peaceiris/actions-gh-pages@v3
+        if: (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop') && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/site/pitest
+          publish_dir: ./target/pit-reports
